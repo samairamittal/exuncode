@@ -1,0 +1,447 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+/*
+ * Design tokens. Values live here once; tailwind.config.ts maps them to utilities
+ * (bg-paper, text-ink, ...). Values measured from design/home.png override the
+ * defaults from CLAUDE.md.
+ */
+:root {
+  /* Colour: CLAUDE.md defaults */
+  --paper: #e9eef6;
+  --panel: #ffffff;
+  --ink: #14213d;
+  --ink-2: #4a5a7a;
+  --game: #c42fd6;
+  --alert: #c2362e;
+  --lens-bg: #0a1428;
+  --lens-glow: #5fd4ff;
+  --cork: #c9a27a;
+  --card-paper: #f7f3ea;
+
+  /* Colour: from design/home.png */
+  --exun-blue: #003fff;
+  --void: #000000;
+  --snow: #ffffff;
+  --line: #f7f7f7;
+  --surface-1: #222222;
+  --surface-2: #282828;
+  --crt-shade: rgb(0 0 0 / 0.1);
+  --crt-roll: rgb(255 255 255 / 0.06);
+
+  /* Type */
+  --font-ui: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --text-nav: 23px;
+
+  /* Layer stack */
+  --z-background: 0;
+  --z-content: 10;
+  --z-overlay: 50;
+  --z-hud: 100;
+  --z-transition: 1000;
+
+  /* Nav (design px at 1728 wide) */
+  --nav-top: 38px;
+  --nav-inset-l: 67px;
+  --nav-inset-r: 66px;
+  --nav-h: 100px;
+  --nav-radius: 44px;
+  --nav-pad-l: 44px;
+  --nav-pad-r: 28px;
+  --nav-logo-w: 60px;
+  --nav-logo-h: 46px;
+  --nav-logo-gap: 61px;
+  --search-w: 437px;
+  --search-h: 60px;
+  --search-btn: 74px;
+  --search-btn-x: 3px;
+  --search-text-x: 112px;
+  --avatar: 58px;
+  --avatar-ring: 4px;
+  --nav-total: 138px;
+  /* Optical offsets: design text sits 2px above centre, logo 1px below. */
+  --nav-text-dy: 2px;
+  --nav-logo-dy: 1px;
+  /* Gaps between nav items, as flex-grow ratios (measured px at 1728). */
+  --nav-gap-search: 116;
+  --nav-gap-lens: 197;
+  --nav-gap-trace: 183;
+  --nav-gap-crux: 101;
+
+  /* Home stage */
+  --stage-top: 150px;
+  --crt-line: 6px;
+
+  /* eXunTrace (design/exuntrace.png, design px at 1728 wide) */
+  --nav-top-trace: 30px;
+  --surface-0: #0e0e0e;
+  --marker-outage: #f3ee01;
+  --trace-top: 168px;
+  --trace-inset-l: 67px;
+  --trace-inset-r: 66px;
+  --trace-tracking: -0.06em;
+  --trace-tracking-head: -0.05em;
+  --trace-tracking-day: -0.04em;
+  --trace-tracking-note: -0.09em;
+  --spread-h: 75px;
+  --spread-fill: 56.24%; /* fill width as drawn; TODO(design): the label says 45% */
+  --spread-fade: 89.84%; /* where the track's blue fades to surface-0 */
+  --spread-label-r: 100px;
+  --trace-gap-top: 24px;
+  --trace-col-l: 522px;
+  --trace-col-gap: 18px;
+  --trace-card-gap: 16px;
+  --trace-card-inset: 4px;
+  --trace-card-radius: 43px;
+  --trace-head-h: 100px;
+  --trace-head-radius: 42px;
+  --map-x: 19px;
+  --map-top: 29px;
+  --map-w: 476px;
+  --map-h: 430px;
+  --map-radius: 40px;
+  --marker: 22px;
+  --legend-dot: 26px;
+  --legend-x: 44px;
+  --legend-top: 19px;
+  --legend-col-1: 170px;
+  --legend-col-2: 129px;
+  --legend-gap: 6px;
+  --sighting-h: 185px;
+  --sighting-title-top: 35px;
+  --steps-top: 107px;
+  --steps-w: 391px;
+  --step: 42px;
+  --step-line: 4px;
+  --days-top: 29px;
+  --days-inset-l: 23px;
+  --days-inset-r: 27px;
+  --day-w: 266px;
+  --day-h: 99px;
+  --day-radius: 40px;
+  --day-note-top: 13px;
+  --trace-bottom: 24px;
+  --text-trace-head: 35px;
+  --text-trace-day: 30px;
+  --text-trace-note: 20px;
+  --text-trace-legend: 15px;
+  --text-trace-step: 20px;
+  --day-note-lh: 29px;
+  /* Optical offsets: design text sits this far below centre. */
+  --trace-head-dy: 3px;
+  --day-dy: 1.5px;
+  --spread-dy: 1px;
+  --step-dy: 1px;
+
+  /* eXunLens (lens1.png framework at 1728 x 1117). HUD colours carry meaning:
+     cyan normal, amber warning, red discrepancy/error, magenta only for the game. */
+  --lens-top: 166px;
+  --lens-bottom: 24px;
+  --hud-cyan: #5fd4ff;
+  --hud-amber: #ffb547;
+  --hud-red: #ff5a4f;
+  --hud-magenta: #e04cf0;
+  --hud-line: rgb(255 255 255 / 0.14);
+
+  /* eXunCrux (design/exuncrux.png): the board spans the trace insets. */
+  --crux-top: 184px;
+  --crux-bottom: 39px;
+}
+
+@media (max-width: 1279px) {
+  /* Not in the design: tighter nav for smaller screens (needs design review). */
+  :root {
+    --nav-top: 24px;
+    --nav-inset-l: 24px;
+    --nav-inset-r: 24px;
+    --nav-h: 80px;
+    --nav-pad-l: 28px;
+    --nav-pad-r: 16px;
+    --nav-logo-gap: 32px;
+    --search-w: 300px;
+    --search-h: 52px;
+    --search-btn: 62px;
+    --search-text-x: 92px;
+    --text-nav: 19px;
+    --avatar: 50px;
+    --nav-total: 104px;
+    --stage-top: 112px;
+    --nav-top-trace: 24px;
+    --trace-top: 128px;
+    --trace-inset-l: 24px;
+    --trace-inset-r: 24px;
+    --crux-top: 128px;
+    --lens-top: 128px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --nav-top: 16px;
+    --nav-inset-l: 16px;
+    --nav-inset-r: 16px;
+    --nav-h: 60px;
+    --nav-pad-l: 18px;
+    --nav-pad-r: 8px;
+    --nav-logo-w: 40px;
+    --nav-logo-h: 31px;
+    --nav-logo-gap: 12px;
+    --search-btn: 44px;
+    --search-w: var(--search-btn);
+    --search-h: var(--search-btn);
+    --search-btn-x: 0px;
+    --text-nav: 14px;
+    --avatar: 40px;
+    --avatar-ring: 3px;
+    --nav-total: 76px;
+    --stage-top: 84px;
+    --nav-top-trace: 16px;
+    --trace-top: 96px;
+    --trace-inset-l: 16px;
+    --trace-inset-r: 16px;
+    --spread-label-r: 24px;
+    --legend-x: 20px;
+    --steps-w: calc(100% - 64px);
+    --crux-top: 96px;
+    --lens-top: 96px;
+    --crux-bottom: 24px;
+  }
+}
+
+/*
+ * eXunTrace between tablet and the design width: keep the design's two-column layout and
+ * scale it to the content width (design content is 1595px wide). The page wrapper is the
+ * size container, so 100cqw excludes the scrollbar.
+ */
+@media (min-width: 1024px) and (max-width: 1727px) {
+  .trace-scale {
+    --tu: calc((100cqw - var(--trace-inset-l) - var(--trace-inset-r)) / 1595);
+    --spread-h: calc(75 * var(--tu));
+    --spread-label-r: calc(100 * var(--tu));
+    --trace-gap-top: calc(24 * var(--tu));
+    --trace-col-l: calc(522 * var(--tu));
+    --trace-col-gap: calc(18 * var(--tu));
+    --trace-card-gap: calc(16 * var(--tu));
+    --trace-card-inset: calc(4 * var(--tu));
+    --trace-card-radius: calc(43 * var(--tu));
+    --trace-head-h: calc(100 * var(--tu));
+    --trace-head-radius: calc(42 * var(--tu));
+    --map-x: calc(19 * var(--tu));
+    --map-top: calc(29 * var(--tu));
+    --map-w: calc(476 * var(--tu));
+    --map-h: calc(430 * var(--tu));
+    --map-radius: calc(40 * var(--tu));
+    --marker: calc(22 * var(--tu));
+    --legend-dot: calc(26 * var(--tu));
+    --legend-x: calc(44 * var(--tu));
+    --legend-top: calc(19 * var(--tu));
+    --legend-col-1: calc(170 * var(--tu));
+    --legend-col-2: calc(129 * var(--tu));
+    --legend-gap: calc(6 * var(--tu));
+    --sighting-h: calc(185 * var(--tu));
+    --sighting-title-top: calc(35 * var(--tu));
+    --steps-top: calc(107 * var(--tu));
+    --steps-w: calc(391 * var(--tu));
+    --step: calc(42 * var(--tu));
+    --step-line: calc(4 * var(--tu));
+    --days-top: calc(29 * var(--tu));
+    --days-inset-l: calc(23 * var(--tu));
+    --days-inset-r: calc(27 * var(--tu));
+    --day-w: calc(266 * var(--tu));
+    --day-h: calc(99 * var(--tu));
+    --day-radius: calc(40 * var(--tu));
+    --day-note-top: calc(13 * var(--tu));
+    --trace-bottom: calc(24 * var(--tu));
+    --text-trace-head: calc(35 * var(--tu));
+    --text-trace-day: calc(30 * var(--tu));
+    --text-trace-note: calc(20 * var(--tu));
+    --text-trace-legend: calc(15 * var(--tu));
+    --text-trace-step: calc(20 * var(--tu));
+    --day-note-lh: calc(29 * var(--tu));
+    --trace-head-dy: calc(3 * var(--tu));
+    --day-dy: calc(1.5 * var(--tu));
+    --spread-dy: calc(1 * var(--tu));
+    --step-dy: calc(1 * var(--tu));
+  }
+}
+
+html,
+body {
+  background: var(--void);
+  color: var(--snow);
+  font-family: var(--font-ui);
+}
+
+/* CRT scanlines, used by the Home screen layer. */
+.crt-lines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--crt-line) / 2),
+    var(--crt-shade) calc(var(--crt-line) / 2),
+    var(--crt-shade) var(--crt-line)
+  );
+}
+
+.crt-roll {
+  background-image: linear-gradient(to bottom, transparent, var(--crt-roll) 50%, transparent);
+}
+
+/* eXunTrace map markers: a ring that keeps pinging outward. */
+.marker-ping {
+  animation: marker-ping 1.8s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+
+@keyframes marker-ping {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker-ping {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/*
+ * eXunLens stage: laid out at design size, then zoomed to the width it has (the wrapper is
+ * the size container). tan(atan2(a, b)) turns the length ratio into a plain number.
+ */
+.lens-stage {
+  width: 433px;
+  zoom: tan(atan2(100cqw, 433px));
+}
+
+@media (min-width: 1024px) {
+  .lens-stage {
+    width: 1595px;
+    zoom: tan(atan2(100cqw, 1595px));
+  }
+}
+
+/* eXunLens idle states. */
+.lens-spin {
+  animation: lens-spin var(--lens-spin, 120s) linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.lens-blink {
+  animation: lens-blink var(--lens-blink, 1.6s) ease-in-out infinite;
+}
+
+.lens-wave {
+  animation: lens-wave 0.9s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes lens-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes lens-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes lens-wave {
+  from {
+    transform: scaleY(0.25);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Lens core states: listening pulses, music pulses on each beat (remounted per beat). */
+.lens-pulse {
+  animation: lens-pulse 1.4s ease-out infinite;
+}
+
+.lens-beat {
+  animation: lens-pulse 0.5s ease-out 1 forwards;
+}
+
+@keyframes lens-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+}
+
+/* Hand reticle tap ripple. */
+.hand-ripple {
+  animation: hand-ripple 0.3s ease-out 1 forwards;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes hand-ripple {
+  from {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Lens power: boot after a double clap (panels come up in turn), sleep after "close lens". */
+[data-power="booting"] [data-anim="lens-layer-content"] > * {
+  animation: lens-boot 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+[data-power="booting"] [data-anim="lens-layer-content"] > :nth-child(2) {
+  animation-delay: 0.25s;
+}
+
+[data-power="booting"] [data-anim="lens-layer-content"] > :nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+[data-power="booting"] [data-anim="lens-layer-content"] > :nth-child(n + 4) {
+  animation-delay: 0.75s;
+}
+
+@keyframes lens-boot {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+[data-power="sleep"] [data-anim="lens-layer-content"] {
+  opacity: 0.35;
+  transition: opacity 1.2s ease-in;
+}
+
+[data-power="sleep"] .lens-spin {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lens-spin,
+  .lens-blink,
+  .lens-wave,
+  .lens-pulse,
+  .lens-beat,
+  .hand-ripple,
+  [data-power="booting"] [data-anim="lens-layer-content"] > * {
+    animation: none;
+  }
+}
